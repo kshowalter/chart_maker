@@ -1,0 +1,15 @@
+{
+  "name": "chart_maker",
+  "version": "0.1.0",
+  "description": "This makes a certain type of chart.",
+  "main": "index.js",
+  "scripts": {
+    "serve": "webpack-dev-server --content-base public/ --inline --hot -d"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+  },
+  "devDependencies": {
+  }
+}
