@@ -1,11 +1,11 @@
 console.log('script loaded');
 
+var Kstore = require('kstore');
+
 var mkAPIPoint = require('./modules/mkAPIPoint');
 var mkConnector = require('./modules/mkConnector');
 
 module.exports = function(input){
-  
-  console.log('page loaded');
 
   var viewBox = input.viewBox || '0 0 ' + input.width +' '+ input.height;
 
@@ -20,52 +20,28 @@ module.exports = function(input){
   };
 
   var plot = {
-    point: {},
+    point: input.points,
     connector: {},
     svgSpec: svgSpec,
+    points: Kstore(),
     addPoint: function(point){
+      this.points.insert(point);
+
       this.svgSpec.children.push(
         mkAPIPoint(point)
       );
     },
-    connect: function( point1name, point2name){
+    cDown: function( point1name, point2name){
+      var p1 = this.points.findOne({name: point1name });
+      var p2 = this.points.findOne({name: point2name });
       this.svgSpec.children.push(
         //mkAPIPoint( this.point[point], text, url )
-        mkConnector( this.point[point1name], this.point[point2name] )
+        mkConnector( p1, p2 )
       );
     }
   };
 
-  plot.point = input.points;
 
-  for( var pointName in plot.point ){
-    var point = plot.point[pointName];
-    if( ! point.label ){
-      point.label = pointName;
-    }
-    point.connect = {};
-    if( point.type === 'api' ){
-      point.connect.in = {
-        x: 0,
-        y: -4
-      };
-      point.connect.out = {
-        x: 0,
-        y: 4
-      };
-    } else if( point.type === 'module' ){
-      point.connect.in = {
-        x: 0,
-        y: -12.5
-      };
-      point.connect.out = {
-        x: 0,
-        y: 12.5
-      };
-    }
-
-    plot.addPoint(plot.point[pointName]);
-  }
 
   return plot;
 };

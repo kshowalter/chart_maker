@@ -6,14 +6,13 @@ module.exports = function(p1, p2){
     return false;
   }
 
-
   var from = {
-    x: p1.x + p1.connect.out.x,
-    y: p1.y + p1.connect.out.y
+    x: p1.x + p1.connectionPoints.out.x,
+    y: p1.y + p1.connectionPoints.out.y
   };
   var to = {
-    x: p2.x + p2.connect.in.x,
-    y: p2.y + p2.connect.in.y
+    x: p2.x + p2.connectionPoints.in.x,
+    y: p2.y + p2.connectionPoints.in.y
   };
 
   var connectorConfig = mkArrow(from,to);

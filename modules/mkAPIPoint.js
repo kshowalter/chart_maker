@@ -1,4 +1,43 @@
 module.exports = function(point){
+  point.connectionPoints = {};
+  if( point.type === 'api' ){
+    point.connectionPoints = {
+      in: {
+        x: 0,
+        y: -4
+      },
+      out: {
+        x: 0,
+        y: 4
+      }
+    };
+  } else if( point.type === 'module' ){
+    point.connectionPoints = {
+      in: {
+        x: 0,
+        y: -12.5
+      },
+      out: {
+        x: 0,
+        y: 12.5
+      },
+      right: {
+        x: 0,
+        y: 4
+      }
+    };
+  } else {
+    console.warn('unknown point type');
+  }
+
+  if( ! point.label ){
+    point.label = point.name;
+  }
+
+
+
+
+
   var pointConfig = {
     tag: 'g',
     props: {
