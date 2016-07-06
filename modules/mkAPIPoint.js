@@ -1,4 +1,17 @@
+var _ = require('lodash');
+
 module.exports = function(point){
+  if( ! point.label ){
+    point.label = point.name.split('_').map(function(word){
+      return _.capitalize(word);
+    }).join(' ');
+  }
+  var labelWords = point.label.split(' ');
+  var longestWord = labelWords.reduce(function(previousValue,currentValue){
+    return Math.max(previousValue,currentValue.length);
+  },1);
+  var labelLineNum = labelWords.length;
+
   point.connectionPoints = {};
   if( point.type === 'api' ){
     point.connectionPoints = {
@@ -15,11 +28,11 @@ module.exports = function(point){
     point.connectionPoints = {
       in: {
         x: 0,
-        y: -12.5
+        y: -(20*labelLineNum+5)/2
       },
       out: {
         x: 0,
-        y: 12.5
+        y: (20*labelLineNum+5)/2
       },
       right: {
         x: 0,
@@ -29,11 +42,6 @@ module.exports = function(point){
   } else {
     console.warn('unknown point type');
   }
-
-  if( ! point.label ){
-    point.label = point.name;
-  }
-
 
 
 
@@ -77,29 +85,30 @@ module.exports = function(point){
       layerName = 'apiPointTitle';
     }
 
-    pointConfig.children.push(
-      {
-        tag: 'text',
-        props: {
-          x: 15,
-          y: 5
-        },
-        meta: {
-          layerName: layerName,
-          fontName: point.type+'Title'
-        },
-        text: point.label
-      }
-    );
+    var startY = 5 - (labelLineNum-1) * 7;
+    labelWords.forEach(function(labelWord, i){
+      pointConfig.children.push(
+        {
+          tag: 'text',
+          props: {
+            x: 15,
+            y: startY + (16*i)
+          },
+          meta: {
+            layerName: layerName,
+            fontName: point.type+'Title'
+          },
+          text: labelWord
+        }
+      );
+    });
   } else  if(point.type === 'module'){
-
     var rect = {
-      width: point.label.length * 10,
-      height: 25
+      width: longestWord * 11,
+      height: 20*labelLineNum+5
     };
     rect.x = 0 - rect.width/2;
     rect.y = 0 - rect.height/2;
-
 
     pointConfig.children.push(
       {
@@ -128,20 +137,25 @@ module.exports = function(point){
       layerName = 'modulePointTitle';
     }
 
-    pointConfig.children.push(
-      {
-        tag: 'text',
-        props: {
-          x: 0,
-          y: 6
-        },
-        meta: {
-          layerName: layerName,
-          fontName: point.type+'Title'
-        },
-        text: point.label
-      }
-    );
+    var startY = 4 - (labelLineNum-1) * 7;
+    labelWords.forEach(function(labelWord, i){
+      pointConfig.children.push(
+        {
+          tag: 'text',
+          props: {
+            x: 0,
+            y: startY + (16*i)
+          },
+          meta: {
+            layerName: layerName,
+            fontName: point.type+'Title'
+          },
+          text: labelWord
+        }
+      );
+    });
+
+
   } else {
     console.warn('point not defined');
   }
