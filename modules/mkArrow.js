@@ -7,8 +7,6 @@ module.exports = function(from, to, options){
   var flow = options.flow || 'forward';
   var type = options.type || 'down';
 
-  var aL = 15; // Arrow length
-  var aW = 5; // Arrow length / 2
   var s = 20; // strait part of connector line
   var cPo = s*2; //Control point offset
   //var cPoH = half.y - from.y - s*1;
@@ -50,20 +48,14 @@ module.exports = function(from, to, options){
       connectorPath = `M ${from.x},${from.y}
                        L ${to.x},${to.y}`;
       startArrowHead = {
-        x: from.x,
-        y: from.y
+        x: (from.x + to.x)/2,
+        y: (from.y + to.y)/2
       };
+
     }
   }
 
   //if( options.type === 'down' ){
-
-  var arrowHeadConfig;
-  if( flow === 'forward' || flow === 'both' ){
-    arrowHeadConfig = mkArrowHead( startArrowHead, to );
-  } else if( flow === 'reverse' || flow === 'both' ){
-    arrowHeadConfig = mkArrowHead( startArrowHead, from );
-  }
 
   var connectorConfig = {
     tag: 'g',
@@ -73,10 +65,18 @@ module.exports = function(from, to, options){
         props: {
           d: connectorPath
         }
-      },
-      arrowHeadConfig
+      }
     ]
   };
+
+  if( flow === 'forward' || flow === 'both' ){
+    var arrowHeadConfigF = mkArrowHead( startArrowHead, to );
+    connectorConfig.children.push(arrowHeadConfigF);
+  }
+  if( flow === 'reverse' || flow === 'both' ){
+    var arrowHeadConfigR = mkArrowHead( startArrowHead, from );
+    connectorConfig.children.push(arrowHeadConfigR);
+  }
 
   return connectorConfig;
 };

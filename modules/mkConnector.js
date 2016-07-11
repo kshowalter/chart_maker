@@ -60,6 +60,7 @@ module.exports = function(p1, p2, options){
     type: 'down'
   }, options);
 
+
   var connectorConfig = mkArrow(from, to, options);
 
   return connectorConfig;
