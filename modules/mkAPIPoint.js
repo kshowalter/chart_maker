@@ -13,38 +13,6 @@ module.exports = function(point){
   var labelLineNum = labelWords.length;
 
   point.connectionPoints = {};
-  if( point.type === 'api' ){
-    point.connectionPoints = {
-      in: {
-        x: 0,
-        y: -4
-      },
-      out: {
-        x: 0,
-        y: 4
-      }
-    };
-  } else if( point.type === 'module' ){
-    point.connectionPoints = {
-      in: {
-        x: 0,
-        y: -(20*labelLineNum+5)/2
-      },
-      out: {
-        x: 0,
-        y: (20*labelLineNum+5)/2
-      },
-      right: {
-        x: 0,
-        y: 4
-      }
-    };
-  } else {
-    console.warn('unknown point type');
-  }
-
-
-
 
   var pointConfig = {
     tag: 'g',
@@ -64,6 +32,25 @@ module.exports = function(point){
   };
 
   if( point.type === 'api'){
+    var outerRadius = 4;
+    point.connectionPoints = {
+      in: {
+        x: 0,
+        y: -outerRadius
+      },
+      out: {
+        x: 0,
+        y: outerRadius
+      },
+      right: {
+        x: outerRadius,
+        y: 0
+      },
+      left: {
+        x: -outerRadius,
+        y: 0
+      }
+    };
     pointConfig.children.push(
       {
         tag: 'circle',
@@ -85,7 +72,7 @@ module.exports = function(point){
       layerName = 'apiPointTitle';
     }
 
-    var startY = 5 - (labelLineNum-1) * 7;
+    var startY = 2 - (labelLineNum-1) * 7;
     labelWords.forEach(function(labelWord, i){
       pointConfig.children.push(
         {
@@ -109,6 +96,25 @@ module.exports = function(point){
     };
     rect.x = 0 - rect.width/2;
     rect.y = 0 - rect.height/2;
+
+    point.connectionPoints = {
+      in: {
+        x: 0,
+        y: -(20*labelLineNum+5)/2
+      },
+      out: {
+        x: 0,
+        y: (20*labelLineNum+5)/2
+      },
+      right: {
+        x: rect.width/2,
+        y: 0
+      },
+      left: {
+        x: -rect.width/2,
+        y: 0
+      }
+    };
 
     pointConfig.children.push(
       {

@@ -1,22 +1,8 @@
-var findDirection = require('./findDirection');
+module.exports = function(from, to, options){
 
-module.exports = function(from, to){
-
-  var direction = findDirection(from, to);
-
-  var half;
-  if( direction === 'y-' && from.x === to.x ){
-    half = {
-      x: to.x - 100,
-      y: to.y - 100
-    };
-  } else {
-    half = {
-      x: (from.x + to.x )/2,
-      y: (from.y + to.y )/2
-    };
-  }
-
+  var direction = options.direction;
+  var half = options.half;
+  var flow = options.flow || 'forward';
 
   var aL = 15; // Arrow length
   var aW = 5; // Arrow length / 2
@@ -30,7 +16,6 @@ module.exports = function(from, to){
     connectorPath = `M ${from.x},${from.y}
                      C ${from.x},${from.y+cPo} ${to.x},${to.y-cPo} ${to.x},${to.y-s}
                      L ${to.x},${to.y}`;
-    arrowHeadPoints = `${to.x},${to.y} ${to.x-aW},${to.y-aL} ${to.x+aW},${to.y-aL}`;
   } else if( direction === 'y-' ){
     connectorPath = `M ${from.x},${from.y}
                      L ${from.x},${from.y+s}
@@ -38,14 +23,18 @@ module.exports = function(from, to){
                      L ${half.x},${to.y-s}
                      C ${half.x},${ to.y-cPo } ${to.x},${to.y-cPo} ${to.x},${to.y-s}
                      L ${to.x},${to.y}`;
-    arrowHeadPoints = `${to.x},${to.y} ${to.x-aW},${to.y-aL} ${to.x+aW},${to.y-aL}`;
   } else if( direction === 'x+' || direction === 'x-' ){
     //if( direction === 'x-') cPo = -cPo;
     connectorPath = `M ${from.x},${from.y}
                      C ${from.x},${ from.y+cPo } ${half.x},${from.y+cPo} ${half.x},${half.y}
                      C ${half.x},${ to.y-cPo } ${to.x},${to.y-cPo} ${to.x},${to.y-s}
                      L ${to.x},${to.y}`;
+  }
+
+  if( flow === 'forward' || flow === 'both' ){
     arrowHeadPoints = `${to.x},${to.y} ${to.x-aW},${to.y-aL} ${to.x+aW},${to.y-aL}`;
+  } else if( flow === 'reverse' || flow === 'both' ){
+    arrowHeadPoints = `${from.x},${from.y} ${from.x+aW},${from.y+aL} ${from.x-aW},${from.y+aL}`;
   }
 
 

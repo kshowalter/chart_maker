@@ -5,7 +5,7 @@ module.exports = function(p1, p2){
 
   var axis;
   //if( Math.abs(diffH) > ( Math.abs(diffV)*2 ) ){
-  if( Math.abs(diffV) < 75 ){
+  if( Math.abs(diffH) > Math.abs(diffV)*3 ){
     axis = 'horizontal';
   } else {
     axis = 'vertical';
