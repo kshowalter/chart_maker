@@ -1,5 +1,3 @@
-console.log('script loaded');
-
 var Kstore = require('kstore');
 
 var mkAPIPoint = require('./modules/mkAPIPoint');
@@ -31,12 +29,37 @@ module.exports = function(input){
         mkAPIPoint(point)
       );
     },
-    cDown: function( point1name, point2name){
+    cDown: function( point1name, point2name, options){
       var p1 = this.points.findOne({name: point1name });
       var p2 = this.points.findOne({name: point2name });
+      options = Object.assign({
+        type: 'down'
+      }, options);
       this.svgSpec.children.push(
         //mkAPIPoint( this.point[point], text, url )
-        mkConnector( p1, p2 )
+        mkConnector( p1, p2, options )
+      );
+    },
+    cUp: function( point1name, point2name, options){
+      var p1 = this.points.findOne({name: point1name });
+      var p2 = this.points.findOne({name: point2name });
+      options = Object.assign({
+        type: 'up'
+      }, options);
+      this.svgSpec.children.push(
+        //mkAPIPoint( this.point[point], text, url )
+        mkConnector( p1, p2, options )
+      );
+    },
+    cSide: function( point1name, point2name, options){
+      var p1 = this.points.findOne({name: point1name });
+      var p2 = this.points.findOne({name: point2name });
+      options = Object.assign({
+        type: 'side'
+      }, options);
+      this.svgSpec.children.push(
+        //mkAPIPoint( this.point[point], text, url )
+        mkConnector( p1, p2, options )
       );
     }
   };

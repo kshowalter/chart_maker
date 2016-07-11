@@ -20,7 +20,7 @@ module.exports = function(point){
       x: point.x,
       y: point.y,
       onclick: function(){
-        console.log(point.url);
+        //console.log(point.url);
         //window.location.href = url;
         //window.location.href = 'https://github.com/kshowalter/SimpleDOM';
         if( point.url ){
@@ -89,7 +89,7 @@ module.exports = function(point){
         }
       );
     });
-  } else  if(point.type === 'module'){
+  } else if(point.type === 'module'){
     var rect = {
       width: longestWord * 11,
       height: 20*labelLineNum+5
